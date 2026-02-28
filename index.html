@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life Game 5.0</title>
+
+<link rel="manifest" href="manifest.json">
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+
+<style>
+body{
+  font-family: Arial;
+  background:#0f172a;
+  color:white;
+  text-align:center;
+  margin:0;
+}
+header{
+  background:#1e293b;
+  padding:15px;
+  font-size:20px;
+}
+.card{
+  background:#1e293b;
+  margin:15px;
+  padding:15px;
+  border-radius:10px;
+}
+button{
+  padding:8px 15px;
+  margin:5px;
+  border:none;
+  border-radius:6px;
+  background:#38bdf8;
+  color:black;
+  font-weight:bold;
+}
+.progress{
+  height:20px;
+  background:#334155;
+  border-radius:10px;
+  overflow:hidden;
+}
+.bar{
+  height:100%;
+  width:0%;
+  background:lime;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+🔥 Life Game 5.0  
+<br>النقاط: <span id="points">0</span>  
+<br>المستوى: <span id="level">1</span>
+</header>
+
+<div class="card">
+<h3>الطاقة</h3>
+<div class="progress"><div id="energyBar" class="bar"></div></div>
+<h3>القوة</h3>
+<div class="progress"><div id="strengthBar" class="bar"></div></div>
+<h3>اللياقة</h3>
+<div class="progress"><div id="fitnessBar" class="bar"></div></div>
+</div>
+
+<div class="card">
+<h3>تمارين رياضية</h3>
+<button onclick="completeWorkout(200)">بوش اب 100 (200 نقطة)</button>
+<button onclick="completeWorkout(200)">سيت اب 100 (200 نقطة)</button>
+<button onclick="completeWorkout(200)">سكوات 100 (200 نقطة)</button>
+<button onclick="completeWorkout(200)">بلانك دقيقتين (200 نقطة)</button>
+<button onclick="completeWorkout(200)">ركض 10 كيلو (200 نقطة)</button>
+</div>
+
+<div class="card">
+<h3>الصلاة</h3>
+<button onclick="addPoints(200)">فجر جامع (200)</button>
+<button onclick="addPoints(100)">ظهر جامع (100)</button>
+<button onclick="addPoints(100)">عصر جامع (100)</button>
+<button onclick="addPoints(100)">مغرب جامع (100)</button>
+<button onclick="addPoints(100)">عشاء جامع (100)</button>
+</div>
+
+<div class="card">
+<h3>صلاة اخرى / صفحات قرآن</h3>
+<input type="number" id="customCount" placeholder="عدد العداد">
+<button onclick="customPrayer()">احسب</button>
+</div>
+
+<div class="card">
+<h3>شرب ماء (14 كوب = 200 نقطة)</h3>
+<input type="number" id="waterCount" placeholder="عدد الاكواب">
+<button onclick="waterCalc()">احسب</button>
+</div>
+
+<div class="card">
+<h3>دراسة (كل ساعة 300 نقطة)</h3>
+<input type="number" id="studyCount" placeholder="عدد الساعات">
+<button onclick="studyCalc()">احسب</button>
+</div>
+
+<div class="card">
+<h3>تفريش اسنان (كل مرة 50 نقطة)</h3>
+<input type="number" id="teethCount" placeholder="عدد المرات">
+<button onclick="teethCalc()">احسب</button>
+</div>
+
+<script>
+let points=0;
+let level=1;
+let energy=10;
+let strength=5;
+let fitness=5;
+
+function updateUI(){
+document.getElementById("points").innerText=points;
+document.getElementById("level").innerText=level;
+document.getElementById("energyBar").style.width=energy+"%";
+document.getElementById("strengthBar").style.width=strength+"%";
+document.getElementById("fitnessBar").style.width=fitness+"%";
+}
+
+function addPoints(p){
+points+=p;
+checkLevel();
+updateUI();
+}
+
+function completeWorkout(p){
+points+=p;
+energy+=2;
+strength+=2;
+fitness+=2;
+if(energy>100)energy=100;
+if(strength>100)strength=100;
+if(fitness>100)fitness=100;
+checkLevel();
+updateUI();
+}
+
+function customPrayer(){
+let c=parseInt(document.getElementById("customCount").value)||0;
+points+=c*50;
+checkLevel();
+updateUI();
+}
+
+function waterCalc(){
+let c=parseInt(document.getElementById("waterCount").value)||0;
+if(c>=14) points+=200;
+updateUI();
+}
+
+function studyCalc(){
+let c=parseInt(document.getElementById("studyCount").value)||0;
+points+=c*300;
+checkLevel();
+updateUI();
+}
+
+function teethCalc(){
+let c=parseInt(document.getElementById("teethCount").value)||0;
+points+=c*50;
+checkLevel();
+updateUI();
+}
+
+function checkLevel(){
+let required=level*2000;
+if(points>=required){
+level++;
+}
+}
+
+updateUI();
+</script>
+
+</body>
+</html>
